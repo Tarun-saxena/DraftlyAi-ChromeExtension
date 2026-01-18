@@ -1,49 +1,65 @@
 let activeCommentBox = null;
 
+//get the comment box
 document.addEventListener("focusin", (e) => {
-    const el = e.target;
+  const el = e.target;
 
-    const isEditable = el.isContentEditable;
-    const isTextarea = el.tagName === "TEXTAREA";
+  if (el.tagName === "TEXTAREA" || el.isContentEditable) {
+    activeCommentBox = el;
+    console.log(" Comment box tracked:", el);
+  }
+});
 
-    if (isEditable || isTextarea) {
-        activeCommentBox = el;
-        console.log("comment Box is ", el)
+//extract post text
+function extractContext(box) {
+  let el = box;
+
+  while (el && el !== document.body) {
+    const text = el.innerText?.trim();
+    if (text && text.length > 50) {
+      return text;
     }
+    el = el.parentElement;
+  }
 
-})
-
-function getActiveCommentBox() {
-    return activeCommentBox;
+  return "";
 }
 
-chrome.runtime.onMessage.addListener((message,sender,sendResponse)=>{
-    if(message.type=== "GENERATE_COMMENT"){
-        const box=getActiveCommentBox();
 
-        if(!box){
-          console.warn("no comment box found");
-          return;
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.type === "GENERATE_COMMENT") {
+    const box = activeCommentBox;
+
+    if (!box) {
+      console.warn(" No comment box found");
+      return;
+    }
+    const context = extractContext(box);
+    console.log(context);
+
+    chrome.runtime.sendMessage(
+      {
+        type: "REQUEST_COMMENT",
+        payload: { context }
+      },
+      (response) => {
+
+        if (!response.comment) {
+          console.warn("no comment return")
         }
-
-        console.log("comment box found",box);
-
-        const textExample="here is your comment";
 
         box.focus();
 
-        if(box.tagName==="TEXTAREA"){
-            document.execCommand("insertText", false, textExample);
-            box.dispatchEvent(new Event("input", { bubbles: true }));
+        document.execCommand("insertText", false, response.comment);
+        box.dispatchEvent(new Event("input", { bubbles: true }));
 
-        }else if(box.isContentEditable){
-          document.execCommand("insertText", false, textExample);
+
+
+
+      }
+
+
+    )
+
   }
-            box.dispatchEvent(new Event("input", { bubbles: true }));
-
-        };
-
-    }
-  
-
-)
+});
