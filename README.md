@@ -1,9 +1,7 @@
 # DraftlyAI – Chrome Extension (Manifest V3)
 
-DraftlyAI is a Chrome extension built using Manifest V3, React, and TypeScript.  
-It helps users draft comments directly inside comment boxes on websites by detecting the active comment input and inserting generated text automatically.
+DraftlyAi is an AI-powered Chrome extension that helps you write better comments without overthinking. It automatically detects comment boxes, understands the surrounding context, and generates human-like comment drafts you can use or edit instantly.
 
-This project focuses on learning and implementing real-world Chrome extension fundamentals such as content scripts, popup UI, and DOM interaction.
 
 ---
 
@@ -13,7 +11,7 @@ This project focuses on learning and implementing real-world Chrome extension fu
 - Detects the last active comment box on a webpage
 - Inserts text directly into focused comment inputs
 - Works with both textarea and contenteditable elements
-- Designed to work on platforms like blogs and social media sites
+- Designed to work on platforms like blogs and social media sites(X,LinkedIn,Theards etc)
 - Built with modern tooling (Vite, React, TypeScript)
 
 ---
@@ -24,6 +22,18 @@ This project focuses on learning and implementing real-world Chrome extension fu
 - When the extension popup button is clicked, it sends a message to the content script
 - The content script inserts text into the detected comment box
 - The logic is designed to handle real-world editors that rely on user input events
+
+---
+
+## What Problem Does It Solve?
+
+-Staring at a comment box and not knowing what to write
+
+-Rewriting the same comment multiple times
+
+-Skipping replies even when you want to engage
+
+DraftlyAi removes this friction by giving you a solid starting draft in seconds.
 
 ---
 
@@ -89,4 +99,102 @@ Content scripts do not run on Chrome internal pages
 
 The extension requires the user to click inside a comment box before using it
 
-Text generation is currently static (AI integration planned)
+---
+## Privacy & Security
+
+DraftlyAi does NOT store comments
+
+No data is saved locally
+
+Context is processed only for generating drafts
+
+API keys are never exposed in the extension
+
+---
+
+
+## Common Errors & Fixes
+❌ Extension Not Detecting Comment Box
+
+Possible reasons:
+
+>Site uses a custom editor (shadow DOM)
+
+>Input loads dynamically after page load
+
+Fix:
+
+>Refresh the page
+
+>Click inside the comment box once
+
+>Reload the extension from chrome://extensions
+
+❌ Nothing Happens on Click
+
+Possible reasons:
+
+>Content script not injected
+
+>Script blocked by site CSP
+
+Fix:
+
+>Reload the tab
+
+>Make sure the site is not chrome:// or edge://
+
+>Check Console for errors
+
+❌ Backend / API Error
+
+Possible reasons:
+
+>Backend not live yet
+
+>Network error
+
+>API rate limit
+
+Fix:
+
+>Wait for backend deployment update
+
+>Check console logs
+
+>Retry after some time
+
+❌ Changes Not Reflecting
+
+Fix:
+
+>Go to chrome://extensions
+
+>Click Reload on DraftlyAi
+
+>Refresh the webpage
+
+## Debugging Tips
+
+Open DevTools → Console on the webpage
+
+Check logs from content-script.js
+
+Inspect injected DOM elements
+
+Use console.log for tracing detection logic
+
+---
+
+## Planned Features
+
+Change comment mood (funny, casual, professional)
+
+Improve or rewrite user-written comments
+
+Faster responses
+
+Better context handling
+
+
+
